@@ -13,13 +13,13 @@ func NewController(dao Dao) Controller {
 }
 
 func (ctrl *ControllerImpl) AddUser(user model.User) (err error) {
-	return
+	return ctrl.dao.Add(user)
 }
 
 func (ctrl *ControllerImpl) DeleteUser(id int) (err error) {
-	return
+	return ctrl.dao.DeleteById(id)
 }
 
 func (ctrl *ControllerImpl) GetUser(id int) (user model.User, err error) {
-	return
+	return ctrl.dao.GetById(id)
 }
