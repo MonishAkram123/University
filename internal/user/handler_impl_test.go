@@ -8,6 +8,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/suite"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -180,10 +181,10 @@ func (suite *HandlerTestSuite) TestHandlerImplGetIdError() {
 
 func (suite *HandlerTestSuite) TestHandlerImplGetControllerError() {
 	id := 1
-	wantCode := http.StatusBadRequest
+	wantCode := http.StatusServiceUnavailable
 
 	mockCtrl := mocks.NewMockController(suite.mocker)
-	mockCtrl.EXPECT().GetUser(id).Times(1).Return(gomock.Any(), errors.New(""))
+	mockCtrl.EXPECT().GetUser(id).Times(1).Return(model.User{}, errors.New(""))
 	handler := NewHandler(mockCtrl)
 	req, _ := http.NewRequest(http.MethodGet, "user/"+strconv.Itoa(id), strings.NewReader(""))
 
@@ -212,7 +213,7 @@ func (suite *HandlerTestSuite) TestHandlerImplGetControllerSuccess() {
 	}
 
 	var gotBytes []byte
-	_, _ = got.Body.Read(gotBytes)
+	gotBytes, _ = ioutil.ReadAll(got.Body)
 	wantBytes, _ := json.Marshal(wantUser)
 
 	if !reflect.DeepEqual(gotBytes, wantBytes) {
