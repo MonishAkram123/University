@@ -6,10 +6,10 @@ import (
 )
 
 type User struct {
-	Id    int
-	RegNo string
-	Name  string
-	Phone string
+	Id    int    `json:"id"`
+	RegNo string `json:"reg_no"`
+	Name  string `json:"name"`
+	Phone string `json:"phone"`
 }
 
 type Users []User
@@ -23,7 +23,7 @@ func (user *User) Validate() error {
 		return errors.New("field Name is empty")
 	}
 
-	if utils.IsEmptyString(user.Name) {
+	if utils.IsEmptyString(user.Phone) {
 		return errors.New("field Phone is empty")
 	}
 
