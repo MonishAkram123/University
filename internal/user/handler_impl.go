@@ -27,14 +27,20 @@ func (handler *HandlerImpl) Add(request *http.Request) (response http.Response) 
 	user, err := readUserRequestBody(request.Body)
 	if err != nil {
 		logrus.WithError(err).Error("user.handler.Add.error")
-		return http.Response{StatusCode: http.StatusBadRequest}
+		return http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	log := logrus.WithField("user", user)
 	err = handler.controller.AddUser(user)
 	if err != nil {
 		log.Error("user.handler.Add.error")
-		return http.Response{StatusCode: http.StatusServiceUnavailable}
+		return http.Response{
+			StatusCode: http.StatusServiceUnavailable,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	log.Info("user.handler.Add.success")
@@ -48,7 +54,10 @@ func (handler *HandlerImpl) Delete(request *http.Request) (response http.Respons
 	id, err := strconv.Atoi(mux.Vars(request)["id"])
 	if err != nil {
 		logrus.WithError(err).Error("user.handler.Delete.error")
-		return http.Response{StatusCode: http.StatusBadRequest}
+		return http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	log := logrus.WithField("id", id)
@@ -56,7 +65,10 @@ func (handler *HandlerImpl) Delete(request *http.Request) (response http.Respons
 	err = handler.controller.DeleteUser(id)
 	if err != nil {
 		log.Error("user.handler.Add.error")
-		return http.Response{StatusCode: http.StatusServiceUnavailable}
+		return http.Response{
+			StatusCode: http.StatusServiceUnavailable,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	log.Debug("user.handler.Delete.success")
@@ -70,21 +82,30 @@ func (handler *HandlerImpl) Get(request *http.Request) (response http.Response) 
 	id, err := strconv.Atoi(mux.Vars(request)["id"])
 	if err != nil {
 		logrus.WithError(err).Error("user.handler.Get.error")
-		return http.Response{StatusCode: http.StatusBadRequest}
+		return http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	log := logrus.WithField("id", id)
 
 	user, err := handler.controller.GetUser(id)
 	if err != nil {
-		log.Error("user.handler.Get.error")
-		return http.Response{StatusCode: http.StatusServiceUnavailable}
+		log.WithError(err).Error("user.handler.Get.error")
+		return http.Response{
+			StatusCode: http.StatusServiceUnavailable,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	userBytes, err := json.Marshal(user)
 	if err != nil {
 		log.WithField("user", user).WithError(err).Error("user.handler.Get.error")
-		return http.Response{StatusCode: http.StatusServiceUnavailable}
+		return http.Response{
+			StatusCode: http.StatusServiceUnavailable,
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+		}
 	}
 
 	log.WithField("user", user).Debug("user.handler.Get.success")

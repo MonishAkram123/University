@@ -1,4 +1,6 @@
 {
+  "HOST": "localhost",
+  "PORT": 3000,
   "USERS_DB_HOST": "localhost",
   "USERS_DB_PORT": 5432,
   "USERS_DB_USER": "local_admin",

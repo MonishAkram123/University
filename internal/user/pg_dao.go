@@ -17,7 +17,7 @@ var (
 
 const (
 	retryCount = 3
-	retryDelay = time.Second
+	retryDelay = 50* time.Millisecond
 )
 
 type PGDao struct {
