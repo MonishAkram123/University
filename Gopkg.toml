@@ -44,3 +44,11 @@
 [[constraint]]
   name = "github.com/pkg/errors"
   version = "0.9.1"
+
+[[constraint]]
+  name = "github.com/eapache/go-resiliency"
+  version = "1.2.0"
+
+[[constraint]]
+  name = "github.com/spf13/viper"
+  version = "1.7.0"

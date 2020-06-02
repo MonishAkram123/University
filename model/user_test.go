@@ -7,13 +7,13 @@ import (
 
 func TestUser_Validate(t *testing.T) {
 	tests := []struct {
-		user User
+		user    User
 		wantErr bool
-	} {
+	}{
 		{User{}, true},
-		{User{RegNo:"CA1"}, true},
-		{User{RegNo:"CA1", Name:"name1"}, true},
-		{User{RegNo:"CA1", Name:"name1", Phone:"123456789"}, false},
+		{User{RegNo: "CA1"}, true},
+		{User{RegNo: "CA1", Name: "name1"}, true},
+		{User{RegNo: "CA1", Name: "name1", Phone: "123456789"}, false},
 	}
 
 	for i, test := range tests {

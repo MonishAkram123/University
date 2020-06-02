@@ -1,0 +1,7 @@
+{
+  "USERS_DB_HOST": "localhost",
+  "USERS_DB_PORT": 5432,
+  "USERS_DB_USER": "local_admin",
+  "USERS_DB_PWD": "local_password",
+  "USERS_DB_NAME": "university"
+}
