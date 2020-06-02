@@ -2,6 +2,7 @@ package user
 
 import (
 	"University/model"
+	"University/utils"
 	"bytes"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -79,18 +80,19 @@ func (handler *HandlerImpl) Delete(request *http.Request) (response http.Respons
 func (handler *HandlerImpl) Get(request *http.Request) (response http.Response) {
 	logrus.Debug("user.handler.Get.called")
 
-	id, err := strconv.Atoi(mux.Vars(request)["id"])
-	if err != nil {
-		logrus.WithError(err).Error("user.handler.Get.error")
+	regNo := mux.Vars(request)["reg"]
+
+	log := logrus.WithField("regNo", regNo)
+	if utils.IsEmptyString(regNo) {
+		log.Error("user.handler.Get.error")
 		return http.Response{
 			StatusCode: http.StatusBadRequest,
-			Body: ioutil.NopCloser(bytes.NewBuffer([]byte(err.Error()))),
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("invalid reg_no"))),
 		}
 	}
 
-	log := logrus.WithField("id", id)
 
-	user, err := handler.controller.GetUser(id)
+	user, err := handler.controller.GetUser(regNo)
 	if err != nil {
 		log.WithError(err).Error("user.handler.Get.error")
 		return http.Response{

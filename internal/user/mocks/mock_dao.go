@@ -61,17 +61,17 @@ func (mr *MockDaoMockRecorder) DeleteById(id interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteById", reflect.TypeOf((*MockDao)(nil).DeleteById), id)
 }
 
-// GetById mocks base method.
-func (m *MockDao) GetById(id int) (model.User, error) {
+// GetByReg mocks base method.
+func (m *MockDao) GetByReg(regNo string) (model.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetById", id)
+	ret := m.ctrl.Call(m, "GetByReg", regNo)
 	ret0, _ := ret[0].(model.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetById indicates an expected call of GetById.
+// GetByReg indicates an expected call of GetByReg.
 func (mr *MockDaoMockRecorder) GetById(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetById", reflect.TypeOf((*MockDao)(nil).GetById), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByReg", reflect.TypeOf((*MockDao)(nil).GetByReg), id)
 }

@@ -68,22 +68,22 @@ func (suite *TestControllerImplSuite) TestDeleteUserSuccess() {
 }
 
 func (suite *TestControllerImplSuite) TestGetUserError() {
-	id := 1
+	reg := "CA1"
 	mockDao := mocks.NewMockDao(suite.mocker)
-	mockDao.EXPECT().GetById(id).Return(model.User{}, errors.New(""))
+	mockDao.EXPECT().GetById(reg).Return(model.User{}, errors.New(""))
 
-	if _, err := NewController(mockDao).GetUser(id); err == nil {
+	if _, err := NewController(mockDao).GetUser(reg); err == nil {
 		suite.T().Error("expected err but got nil")
 	}
 }
 
 func (suite *TestControllerImplSuite) TestGetUserSuccess() {
-	id := 1
+	reg := "CA1"
 	mockDao := mocks.NewMockDao(suite.mocker)
-	want := model.User{Id: id, RegNo: "CA1", Name: "name1", Phone: "123456789"}
-	mockDao.EXPECT().GetById(id).Return(want, nil)
+	want := model.User{Id: 1, RegNo: reg, Name: "name1", Phone: "123456789"}
+	mockDao.EXPECT().GetById(reg).Return(want, nil)
 
-	if got, err := NewController(mockDao).GetUser(id); err != nil {
+	if got, err := NewController(mockDao).GetUser(reg); err != nil {
 		suite.T().Error("expected no error but got: ", err)
 	} else if !reflect.DeepEqual(want, got) {
 		suite.T().Errorf("got: %v, want: %v", got, want)

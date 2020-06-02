@@ -20,6 +20,6 @@ func (ctrl *ControllerImpl) DeleteUser(id int) (err error) {
 	return ctrl.dao.DeleteById(id)
 }
 
-func (ctrl *ControllerImpl) GetUser(id int) (user model.User, err error) {
-	return ctrl.dao.GetById(id)
+func (ctrl *ControllerImpl) GetUser(regNo string) (user model.User, err error) {
+	return ctrl.dao.GetByReg(regNo)
 }

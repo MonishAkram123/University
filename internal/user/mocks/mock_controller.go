@@ -62,9 +62,9 @@ func (mr *MockControllerMockRecorder) DeleteUser(id interface{}) *gomock.Call {
 }
 
 // GetUser mocks base method.
-func (m *MockController) GetUser(id int) (model.User, error) {
+func (m *MockController) GetUser(regNo string) (model.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUser", id)
+	ret := m.ctrl.Call(m, "GetUser", regNo)
 	ret0, _ := ret[0].(model.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1

@@ -15,7 +15,7 @@ func listenAndServe() {
 func getEndpoints() []server.Endpoint {
 	handler := user.NewHandler(user.NewController(user.GetUsersDao()))
 	return []server.Endpoint {
-		{Method:http.MethodGet, Path: "/users/{id}", Handler: handler.Get},
+		{Method:http.MethodGet, Path: "/users/{reg}", Handler: handler.Get},
 		{Method:http.MethodPost, Path: "/users", Handler: handler.Add},
 		{Method:http.MethodDelete, Path: "/users/{id}", Handler: handler.Delete},
 	}

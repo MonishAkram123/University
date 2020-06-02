@@ -180,15 +180,15 @@ func (suite *HandlerTestSuite) TestHandlerImplGetIdError() {
 }
 
 func (suite *HandlerTestSuite) TestHandlerImplGetControllerError() {
-	id := 1
+	reg := "CA1"
 	wantCode := http.StatusServiceUnavailable
 
 	mockCtrl := mocks.NewMockController(suite.mocker)
-	mockCtrl.EXPECT().GetUser(id).Times(1).Return(model.User{}, errors.New(""))
+	mockCtrl.EXPECT().GetUser(reg).Times(1).Return(model.User{}, errors.New(""))
 	handler := NewHandler(mockCtrl)
-	req, _ := http.NewRequest(http.MethodGet, "user/"+strconv.Itoa(id), strings.NewReader(""))
+	req, _ := http.NewRequest(http.MethodGet, "user/"+reg, strings.NewReader(""))
 
-	req = mux.SetURLVars(req, map[string]string{"id": strconv.Itoa(id)})
+	req = mux.SetURLVars(req, map[string]string{"reg": reg})
 	got := handler.Get(req)
 	if got.StatusCode != wantCode {
 		suite.T().Errorf("got: %v, want: %v", got, wantCode)
@@ -196,16 +196,16 @@ func (suite *HandlerTestSuite) TestHandlerImplGetControllerError() {
 }
 
 func (suite *HandlerTestSuite) TestHandlerImplGetControllerSuccess() {
-	id := 1
+	reg := "CA1"
 	wantCode := http.StatusOK
-	wantUser := model.User{Id: id, RegNo: "CA1", Name: "name1", Phone: "123456789"}
+	wantUser := model.User{Id: 1, RegNo: reg, Name: "name1", Phone: "123456789"}
 
 	mockCtrl := mocks.NewMockController(suite.mocker)
-	mockCtrl.EXPECT().GetUser(id).Times(1).Return(wantUser, nil)
+	mockCtrl.EXPECT().GetUser(reg).Times(1).Return(wantUser, nil)
 	handler := NewHandler(mockCtrl)
-	req, _ := http.NewRequest(http.MethodGet, "user/"+strconv.Itoa(id), strings.NewReader(""))
+	req, _ := http.NewRequest(http.MethodGet, "user/"+reg, strings.NewReader(""))
 
-	req = mux.SetURLVars(req, map[string]string{"id": strconv.Itoa(id)})
+	req = mux.SetURLVars(req, map[string]string{"reg": reg})
 	got := handler.Get(req)
 	if got.StatusCode != wantCode {
 		suite.T().Errorf("got: %v, want: %v", got, wantCode)

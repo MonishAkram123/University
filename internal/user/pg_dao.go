@@ -69,10 +69,10 @@ func (dao *PGDao) DeleteById(id int) (err error) {
 	})
 }
 
-func (dao *PGDao) GetById(id int) (user model.User, err error) {
-	query := `SELECT id, name, reg_no, phone FROM users WHERE id=$1`
+func (dao *PGDao) GetByReg(regNo string) (user model.User, err error) {
+	query := `SELECT id, name, reg_no, phone FROM users WHERE reg_no=$1`
 	err = dao.jobRetrier.Run(func() error {
-		row := dao.db.QueryRow(query, id)
+		row := dao.db.QueryRow(query, regNo)
 		return row.Scan(&user.Id, &user.Name, &user.RegNo, &user.Phone)
 	})
 

@@ -79,20 +79,20 @@ func (suite *UsersDaoTestSuite) Test_PgDao_Add() {
 
 func (suite *UsersDaoTestSuite) Test_PgDao_GetById() {
 	tests := []struct {
-		input    int
+		input    string
 		wantUser model.User
 		wantErr  bool
 	}{
-		{input: 1, wantUser: model.User{Id: 1, RegNo: "CA1", Name: "John", Phone: "123456789"}, wantErr: false},
-		{input: 2, wantErr: true},
+		{input: "CA1", wantUser: model.User{Id: 1, RegNo: "CA1", Name: "John", Phone: "123456789"}, wantErr: false},
+		{input: "CA2", wantErr: true},
 	}
 
 	for i, test := range tests {
 		suite.T().Run("t"+strconv.Itoa(i), func(t *testing.T) {
-			if user, err := suite.testDao.GetById(test.input); (err != nil) != test.wantErr {
-				t.Errorf("GetById wantErr: %v, got: %v", test.wantErr, err != nil)
+			if user, err := suite.testDao.GetByReg(test.input); (err != nil) != test.wantErr {
+				t.Errorf("GetByReg wantErr: %v, got: %v", test.wantErr, err != nil)
 			} else if !reflect.DeepEqual(user, test.wantUser) {
-				t.Errorf("GetById wantUser: %v, got: %v", test.wantUser, user)
+				t.Errorf("GetByReg wantUser: %v, got: %v", test.wantUser, user)
 			}
 		})
 	}
@@ -101,6 +101,7 @@ func (suite *UsersDaoTestSuite) Test_PgDao_GetById() {
 func (suite *UsersDaoTestSuite) Test_PgDao_DeleteById() {
 	tests := []struct {
 		input   int
+		reg     string
 		wantErr bool
 	}{
 		{input: 1, wantErr: false},
@@ -111,7 +112,7 @@ func (suite *UsersDaoTestSuite) Test_PgDao_DeleteById() {
 		suite.T().Run("t"+strconv.Itoa(i), func(t *testing.T) {
 			if err := suite.testDao.DeleteById(test.input); (err != nil) != test.wantErr {
 				t.Errorf("DeleteById wantErr: %v, got: %v", test.wantErr, err != nil)
-			} else if _, err := suite.testDao.GetById(test.input); err == nil {
+			} else if _, err := suite.testDao.GetByReg(test.reg); err == nil {
 				t.Errorf("DeleteById wantErr but got nil")
 			}
 		})
