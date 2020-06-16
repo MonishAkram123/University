@@ -9,14 +9,14 @@ services:
     build:
       context: ./postgres
       dockerfile: dockerfile
+      args:
+        DB_ENV: stage
     container_name: pg12
     ports:
       - 5432:5432
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./postgres:/docker-entrypoint-initdb.d
     networks:
       - university_network
 
@@ -29,9 +29,9 @@ services:
     container_name: user_service
     ports:
       - "3000:3000"
+    env_file:
+      - common_app_build/env_configs/stage.env
     environment:
-      POSTGRES_USERNAME: stage_admin
-      POSTGRES_PASSWORD: stage_password
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       ENV: stage
