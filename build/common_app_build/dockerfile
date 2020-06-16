@@ -1,0 +1,50 @@
+FROM ubuntu:16.04
+
+ENV GO_VERSION 1.13
+ENV GOROOT /usr/local/go
+ENV GOPATH $HOME/go
+ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
+
+RUN apt-get update -y 1> /dev/null 2> /dev/null \
+    && apt-get upgrade -y 1> /dev/null 2> /dev/null
+
+RUN apt-get install -y curl git-core apt-transport-https ca-certificates gnupg-agent 1> /dev/null 2> /dev/null \
+    && apt-get clean 1> /dev/null 2> /dev/null
+
+# download golang using curl, install and then delete the .gz file
+RUN curl -X GET https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz -o go${GO_VERSION}.tar.gz \
+    1> /dev/null 2> /dev/null \
+    && mkdir /usr/local/go \
+    && tar -xvf go${GO_VERSION}.tar.gz -C /usr/local 1> /dev/null 2> /dev/null \
+    && rm go${GO_VERSION}.tar.gz
+
+# updating apt repo to install golang-migrate
+RUN curl -sSL https://packagecloud.io/golang-migrate/migrate/gpgkey | apt-key add -
+RUN echo "deb https://packagecloud.io/golang-migrate/migrate/ubuntu/ bionic main" > /etc/apt/sources.list.d/migrate.list
+RUN apt-get update -y 1> /dev/null 2> /dev/null \
+    && apt-get install -y migrate 1> /dev/null 2> /dev/null \
+    && apt-get clean
+
+############################################################
+#                   Setting up service                     #
+############################################################
+
+# Clone the library from git
+RUN git clone https://github.com/MonishAkram123/University.git $GOPATH/src/University \
+    && rm -rf $GOPATH/src/University/.git
+
+WORKDIR $GOPATH/src/University
+
+ARG SERVICE_NAME
+ARG POSTGRES_USERNAME
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_HOST
+ARG POSTGRES_PORT
+ENV BASE_CONFIG_PATH=$GOPATH/src/University/config
+
+# go build will make executable file for the app with name 'app'
+RUN go build -o ./cmd/${SERVICE_NAME}/app ./cmd/${SERVICE_NAME}
+# run.sh will apply migrations and will start the service
+COPY run.sh ./build/run.sh
+# giving executable permission to run.sh
+RUN chmod +x ./build/run.sh

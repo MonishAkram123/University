@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  university_network:
+    driver: bridge
+
+services:
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: dockerfile
+    container_name: pg12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
+    networks:
+      - university_network
+
+  user_service:
+    build:
+      context: ./common_app_build
+      dockerfile: dockerfile
+      args:
+        SERVICE_NAME: user
+    container_name: user_service
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_USERNAME: stage_admin
+      POSTGRES_PASSWORD: stage_password
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      ENV: stage
+      SERVICE_NAME: user
+    depends_on:
+      - postgres
+    entrypoint: ./build/run.sh
+    networks:
+      - university_network
