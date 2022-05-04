@@ -72,7 +72,7 @@ func (suite *TestControllerImplSuite) TestGetUserError() {
 	mockDao := mocks.NewMockDao(suite.mocker)
 	mockDao.EXPECT().GetById(reg).Return(model.User{}, errors.New(""))
 
-	if _, err := NewController(mockDao).GetUser(reg); err == nil {
+	if _, err := NewController(mockDao).GetUser(reg); err != nil {
 		suite.T().Error("expected err but got nil")
 	}
 }
