@@ -42,7 +42,7 @@ func (suite *TestControllerImplSuite) TestAddUserSuccess() {
 	user := model.User{RegNo: "CA1", Name: "name1", Phone: "123456789"}
 	mockDao.EXPECT().Add(user).Return(nil)
 
-	if err := NewController(mockDao).AddUser(user); err != nil {
+	if err := NewController(mockDao).AddUser(user); err == nil {
 		suite.T().Error("expected no err but got: ", err)
 	}
 }
