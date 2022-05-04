@@ -29,7 +29,8 @@ func GetUsersDao() Dao {
 	once.Do(func() {
 		pgDao, err := newPgDao()
 		if err != nil {
-			logrus.WithError(err).Fatal("newPgDao.error")
+			
+			logrus.WithError(err).Fatal("newPgDao.error ")
 		}
 		dao = &pgDao
 	})
